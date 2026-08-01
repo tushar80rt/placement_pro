@@ -1,1 +1,1 @@
-export const resumeTips: any[] = [];
+export {};

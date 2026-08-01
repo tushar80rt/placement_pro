@@ -1,7 +1,8 @@
 <script lang="ts">
 	import Breadcrumbs from '$lib/components/ui/Breadcrumbs.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
-	import { Search, PlayCircle, Clock, Star, ExternalLink, Filter } from 'lucide-svelte';
+	import { Search, PlayCircle, Clock, Star, ExternalLink, Filter, FileText, Download } from 'lucide-svelte';
+	import { pdfResources } from '$lib/data/pdfs';
 </script>
 
 <div class="max-w-6xl mx-auto py-8 px-4 md:px-8 space-y-8">
@@ -84,5 +85,34 @@
 				</div>
 			</div>
 		{/each}
+	</div>
+
+	<!-- PDF Resources Section -->
+	<div class="mt-12">
+		<div class="flex items-center gap-2 mb-6 border-b border-border/50 pb-4">
+			<FileText class="text-primary" size={24} />
+			<h2 class="text-xl font-outfit font-semibold text-text-primary">Interview PDF Guides</h2>
+		</div>
+		
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+			{#each pdfResources as pdf}
+				<a href={pdf.url} target="_blank" rel="noopener noreferrer" class="group flex items-start gap-4 p-5 rounded-xl border border-border/50 bg-white hover:border-primary/40 hover:shadow-card transition-all">
+					<div class="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-red-50 text-red-500 group-hover:bg-red-500 group-hover:text-white transition-colors">
+						<FileText size={20} />
+					</div>
+					<div class="flex-1 min-w-0">
+						<div class="flex items-center justify-between mb-1">
+							<span class="text-[10px] font-bold uppercase tracking-wider text-text-secondary">{pdf.category}</span>
+							<span class="text-[10px] font-mono text-text-secondary bg-secondary-background px-1.5 py-0.5 rounded">{pdf.size}</span>
+						</div>
+						<h3 class="font-bold text-text-primary truncate group-hover:text-primary transition-colors">{pdf.title}</h3>
+						<p class="mt-1 text-xs text-text-secondary line-clamp-2 leading-relaxed">{pdf.description}</p>
+					</div>
+					<div class="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-secondary-background text-text-secondary group-hover:bg-primary/10 group-hover:text-primary transition-colors self-center">
+						<Download size={14} />
+					</div>
+				</a>
+			{/each}
+		</div>
 	</div>
 </div>

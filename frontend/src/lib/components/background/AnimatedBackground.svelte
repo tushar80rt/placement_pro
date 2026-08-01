@@ -6,125 +6,150 @@
   import GradientMesh from './GradientMesh.svelte';
   import FloatingShapes from './FloatingShapes.svelte';
 
-  // Parallax logic
-  let mouseX = 0;
-  let mouseY = 0;
-  let currentX = 0;
-  let currentY = 0;
-  let animationFrame = 0;
+  // Device tier: 'desktop' | 'tablet' | 'mobile' | 'low-end'
+  let deviceTier: 'desktop' | 'tablet' | 'mobile' | 'low-end' = 'desktop';
   let reducedMotion = false;
-  let isMobile = false;
-  let scrollY = 0;
+  
+  // Parallax — only on desktop
+  let parallaxX = 0;
+  let parallaxY = 0;
+  let targetX = 0;
+  let targetY = 0;
+  let animFrame = 0;
+  let isAnimating = false;
 
-  // Smoothing factor for parallax
-  const easing = 0.05;
+  const EASING = 0.06;
+
+  function detectDevice() {
+    const width = window.innerWidth;
+    // Low-end detection: low memory, slow CPU
+    const isLowEnd = (navigator as any).deviceMemory !== undefined 
+      ? (navigator as any).deviceMemory < 4 
+      : false;
+    const isSlowCPU = (navigator as any).hardwareConcurrency !== undefined
+      ? (navigator as any).hardwareConcurrency <= 4
+      : false;
+
+    if (width <= 640 || (isLowEnd && isSlowCPU)) {
+      deviceTier = 'low-end';
+    } else if (width <= 1024) {
+      deviceTier = width <= 768 ? 'mobile' : 'tablet';
+    } else {
+      deviceTier = isLowEnd ? 'mobile' : 'desktop';
+    }
+  }
+
+  function lerp(a: number, b: number, t: number) {
+    return a + (b - a) * t;
+  }
+
+  function animate() {
+    const dx = targetX - parallaxX;
+    const dy = targetY - parallaxY;
+
+    if (Math.abs(dx) > 0.01 || Math.abs(dy) > 0.01) {
+      parallaxX = lerp(parallaxX, targetX, EASING);
+      parallaxY = lerp(parallaxY, targetY, EASING);
+      animFrame = requestAnimationFrame(animate);
+    } else {
+      parallaxX = targetX;
+      parallaxY = targetY;
+      isAnimating = false;
+      animFrame = 0;
+    }
+  }
 
   onMount(() => {
-    // Check for reduced motion
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    reducedMotion = mediaQuery.matches;
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    reducedMotion = mq.matches;
 
-    const updateMotion = (e: MediaQueryListEvent) => {
-      reducedMotion = e.matches;
+    detectDevice();
+
+    const onMQ = (e: MediaQueryListEvent) => { reducedMotion = e.matches; };
+    mq.addEventListener('change', onMQ);
+
+    let resizeTimer: ReturnType<typeof setTimeout>;
+    const onResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(detectDevice, 200);
     };
-    mediaQuery.addEventListener('change', updateMotion);
+    window.addEventListener('resize', onResize, { passive: true });
 
-    const checkMobile = () => { isMobile = window.innerWidth <= 768; };
-    checkMobile();
-    window.addEventListener('resize', checkMobile, { passive: true });
-
-    if (!reducedMotion) {
-      const handleMouseMove = (e: MouseEvent) => {
-        // Calculate mouse position relative to center of screen, normalized from -1 to 1
-        mouseX = (e.clientX / window.innerWidth) * 2 - 1;
-        mouseY = (e.clientY / window.innerHeight) * 2 - 1;
-        
-        if (!animationFrame) {
-          animate();
+    // Only enable mouse parallax on desktop
+    let onMouseMove: ((e: MouseEvent) => void) | null = null;
+    if (!reducedMotion && deviceTier === 'desktop') {
+      onMouseMove = (e: MouseEvent) => {
+        targetX = ((e.clientX / window.innerWidth) * 2 - 1) * -18;
+        targetY = ((e.clientY / window.innerHeight) * 2 - 1) * -18;
+        if (!isAnimating) {
+          isAnimating = true;
+          animFrame = requestAnimationFrame(animate);
         }
       };
-
-      const handleScroll = () => {
-        scrollY = window.scrollY;
-      };
-
-      window.addEventListener('mousemove', handleMouseMove, { passive: true });
-      window.addEventListener('scroll', handleScroll, { passive: true });
-
-      const animate = () => {
-        const dx = mouseX - currentX;
-        const dy = mouseY - currentY;
-        
-        if (Math.abs(dx) > 0.001 || Math.abs(dy) > 0.001) {
-          currentX += dx * easing;
-          currentY += dy * easing;
-          animationFrame = requestAnimationFrame(animate);
-        } else {
-          animationFrame = 0;
-        }
-      };
-      
-      animate();
-
-      return () => {
-        window.removeEventListener('mousemove', handleMouseMove);
-        window.removeEventListener('scroll', handleScroll);
-        window.removeEventListener('resize', checkMobile);
-        mediaQuery.removeEventListener('change', updateMotion);
-        if (animationFrame) cancelAnimationFrame(animationFrame);
-      };
-    } else {
-      return () => {
-        window.removeEventListener('resize', checkMobile);
-        mediaQuery.removeEventListener('change', updateMotion);
-      };
+      window.addEventListener('mousemove', onMouseMove, { passive: true });
     }
+
+    return () => {
+      mq.removeEventListener('change', onMQ);
+      window.removeEventListener('resize', onResize);
+      if (onMouseMove) window.removeEventListener('mousemove', onMouseMove);
+      if (animFrame) cancelAnimationFrame(animFrame);
+      clearTimeout(resizeTimer);
+    };
   });
 
-  // Calculate parallax offsets based on mouse and scroll
-  // The scroll parallax makes the background move UP slower than the content
-  $: parallaxX = currentX * -20; // max 20px shift horizontally
-  $: parallaxY = currentY * -20 + (scrollY * 0.2); // max 20px shift vertically + 20% scroll speed
-  
+  $: isMobile = deviceTier === 'mobile' || deviceTier === 'low-end';
+  $: isLowEnd = deviceTier === 'low-end';
+  $: showParticles = !reducedMotion && deviceTier === 'desktop';
+  $: showShapes = !isLowEnd;
+  $: transform = (reducedMotion || deviceTier !== 'desktop')
+    ? 'translate3d(0,0,0)'
+    : `translate3d(${parallaxX}px,${parallaxY}px,0)`;
 </script>
 
-<div class="animated-background-wrapper">
-  <div class="background-container"
-       style:transform={reducedMotion ? 'none' : `translate3d(${parallaxX}px, ${parallaxY}px, 0)`}>
-    
-    <GradientMesh {reducedMotion} {isMobile} />
-    <AmbientLights {reducedMotion} {isMobile} />
-    <FloatingShapes {reducedMotion} {isMobile} />
-    {#if !reducedMotion}
-      <Particles {isMobile} />
+<div class="animated-bg-wrapper">
+  <div
+    class="bg-container"
+    style:transform={transform}
+  >
+    <GradientMesh {reducedMotion} {isMobile} {isLowEnd} />
+    <AmbientLights {reducedMotion} {isMobile} {isLowEnd} />
+    {#if showShapes}
+      <FloatingShapes {reducedMotion} {isMobile} />
+    {/if}
+    {#if showParticles}
+      <Particles />
     {/if}
   </div>
-  
-  <NoiseOverlay opacity={0.02} />
+
+  {#if !isLowEnd}
+    <NoiseOverlay opacity={isMobile ? 0 : 0.02} />
+  {/if}
 </div>
 
 <style>
-  .animated-background-wrapper {
+  .animated-bg-wrapper {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
     overflow: hidden;
-    z-index: 0; /* Keep it strictly behind */
+    z-index: 0;
     pointer-events: none;
-    background-color: var(--background, #fff8f4); /* Base fallback color from existing design */
+    background-color: var(--background, #fff8f4);
+    contain: strict;
   }
 
-  .background-container {
+  .bg-container {
     position: absolute;
-    inset: -5%; /* slightly larger to avoid edges showing during parallax */
+    inset: -5%;
     width: 110%;
     height: 110%;
     will-change: transform;
-    /* Soften the whole composition */
-    opacity: 0.8;
+    opacity: 0.85;
+    /* Force GPU layer */
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
-
-
 </style>
