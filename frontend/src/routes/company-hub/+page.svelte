@@ -2,7 +2,7 @@
 	import Breadcrumbs from '$lib/components/ui/Breadcrumbs.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
 	import { Search, MapPin, Users, TrendingUp, Building2, ExternalLink, Filter } from 'lucide-svelte';
-	import { companies } from '$lib/data/companies';
+	import { companiesData as companies } from '$lib/data/companies/index';
 </script>
 
 <div class="max-w-6xl mx-auto py-8 px-4 md:px-8 space-y-8">
@@ -55,8 +55,7 @@
 	<div class="border border-border/50 rounded-xl overflow-hidden bg-card-background/20">
 		<div class="flex items-center px-6 py-3 bg-secondary-background/30 border-b border-border/50 text-xs font-medium text-text-secondary uppercase tracking-wider">
 			<div class="flex-1">Company</div>
-			<div class="w-32 hidden md:block">Industry</div>
-			<div class="w-40 hidden lg:block">Location</div>
+			<div class="w-32 hidden md:block">Sector</div>
 			<div class="w-24 text-right">Status</div>
 		</div>
 
@@ -64,8 +63,8 @@
 			{#each companies as company}
 				<a href="/company-hub/{company.id}" data-sveltekit-reload class="group flex items-center px-6 py-4 hover:bg-secondary-background/40 transition-colors cursor-pointer w-full">
 					<div class="flex-1 flex items-center gap-4">
-						<div class="w-8 h-8 rounded bg-background border border-border flex items-center justify-center text-xs font-bold {company.color} {company.hoverColor} transition-colors">
-							{company.logoText}
+						<div class="w-8 h-8 rounded bg-background border border-border flex items-center justify-center text-xs font-bold text-white bg-gradient-to-br {company.color} transition-colors">
+							{company.initials}
 						</div>
 						<span class="text-sm font-medium text-text-primary group-hover:text-primary transition-colors flex items-center gap-2">
 							{company.name}
@@ -73,10 +72,7 @@
 						</span>
 					</div>
 					<div class="w-32 hidden md:block text-sm text-text-secondary">
-						{company.industry}
-					</div>
-					<div class="w-40 hidden lg:block text-sm text-text-secondary">
-						{company.location}
+						{company.sector}
 					</div>
 					<div class="w-24 text-right">
 						{#if company.hiring}

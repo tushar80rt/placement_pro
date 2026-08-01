@@ -259,7 +259,7 @@
           <p class="mb-3 text-sm font-bold uppercase tracking-[0.16em] text-orange-300">Company-specific preparation</p>
           <h2 class="text-3xl font-extrabold leading-tight sm:text-4xl">Know what your dream company is looking for.</h2>
           <p class="mt-5 leading-7 text-slate-300">Get familiar with assessments, core topics, interview questions, and preparation plans tailored to the roles you want.</p>
-          <a href="/company-hub" class="mt-7 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-bold hover:bg-[#df5642]">Explore company hub <ArrowRight size={17} /></a>
+          <a href="/companies" class="mt-7 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-bold hover:bg-[#df5642]">Explore company hub <ArrowRight size={17} /></a>
         </div>
         <div class="mt-10 grid grid-cols-[repeat(auto-fit,minmax(120px,1fr))] gap-3 lg:mt-0 lg:flex-1">
           {#each [

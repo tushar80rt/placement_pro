@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import Breadcrumbs from '$lib/components/ui/Breadcrumbs.svelte';
-	import { companies } from '$lib/data/companies';
-	import { neetcode150 } from '$lib/data/dsa';
-	import { aptitudeQuestions } from '$lib/data/aptitude';
+	import { companiesData as companies } from '$lib/data/companies/index';
+	import { dsaQuestions as neetcode150 } from '$lib/data/dsa/index';
+	import { aptitudeQuestions } from '$lib/data/aptitude/index';
 	import { ExternalLink, CheckCircle2, ChevronDown } from 'lucide-svelte';
 
 	let companyId = '';
@@ -23,8 +23,8 @@
 		'technical-mcq': 'Technical MCQ'
 	};
 
-	let openQuestionId: number | null = null;
-	function toggleQuestion(id: number) {
+	let openQuestionId: string | null = null;
+	function toggleQuestion(id: string) {
 		openQuestionId = openQuestionId === id ? null : id;
 	}
 </script>
@@ -39,8 +39,8 @@
 			]} />
 			
 			<div class="flex items-center gap-5 mt-6">
-				<div class="w-12 h-12 rounded-xl flex items-center justify-center text-xl font-bold {company.color}">
-					{company.logoText}
+				<div class="w-12 h-12 rounded-xl flex items-center justify-center text-xl font-bold text-white bg-gradient-to-br {company.color}">
+					{company.initials}
 				</div>
 				<div>
 					<h1 class="text-2xl font-outfit font-semibold text-text-primary">
@@ -63,11 +63,7 @@
 					{#each neetcode150.slice(0, 15) as prob}
 						<div class="group flex items-center px-4 py-3 hover:bg-secondary-background/40 transition-colors cursor-pointer">
 							<div class="w-10 flex justify-center">
-								{#if prob.status === 'Solved'}
-									<CheckCircle2 size={16} class="text-success" />
-								{:else}
-									<div class="w-4 h-4 rounded border border-border group-hover:border-text-primary/50 transition-colors"></div>
-								{/if}
+								<div class="w-4 h-4 rounded border border-border group-hover:border-text-primary/50 transition-colors"></div>
 							</div>
 							<div class="flex-1 px-4 flex items-center gap-3">
 								<span class="text-sm text-text-secondary font-mono">{prob.id}.</span>
@@ -90,9 +86,9 @@
 			<div class="space-y-4">
 				{#each aptitudeQuestions as q}
 					<!-- Simple filtering to show they are different -->
-					{#if categoryId === 'aptitude' && q.category === 'Quantitative Aptitude' || 
-						 categoryId === 'logical-reasoning' && q.category === 'Logical Reasoning' || 
-						 categoryId === 'technical-mcq' && q.category === 'Technical MCQ'}
+					{#if categoryId === 'aptitude' && q.topic === 'Quantitative Aptitude' || 
+						 categoryId === 'logical-reasoning' && q.topic === 'Logical Reasoning' || 
+						 categoryId === 'technical-mcq' && q.topic === 'Technical MCQ'}
 						<div class="border border-border/50 rounded-xl bg-card-background/20 overflow-hidden">
 							<button class="w-full text-left px-6 py-4 flex items-center justify-between hover:bg-secondary-background/30 transition-colors" on:click={() => toggleQuestion(q.id)}>
 								<div class="flex gap-4 items-start">
@@ -109,8 +105,8 @@
 								<div class="px-6 pb-6 pt-2 border-t border-border/30 bg-secondary-background/10">
 									<div class="ml-10 space-y-2 mt-4">
 										{#each q.options as opt, i}
-											<div class="flex items-center gap-3 p-3 rounded-lg border {q.correctAnswer === i ? 'bg-success/10 border-success/30 text-success' : 'border-border/50 bg-background text-text-secondary'}">
-												<div class="w-5 h-5 rounded-full border flex items-center justify-center text-[10px] {q.correctAnswer === i ? 'border-success bg-success text-white' : 'border-border'}">
+											<div class="flex items-center gap-3 p-3 rounded-lg border {q.answer === i ? 'bg-success/10 border-success/30 text-success' : 'border-border/50 bg-background text-text-secondary'}">
+												<div class="w-5 h-5 rounded-full border flex items-center justify-center text-[10px] {q.answer === i ? 'border-success bg-success text-white' : 'border-border'}">
 													{String.fromCharCode(65 + i)}
 												</div>
 												<span class="text-sm">{opt}</span>

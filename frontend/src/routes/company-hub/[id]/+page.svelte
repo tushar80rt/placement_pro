@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import Breadcrumbs from '$lib/components/ui/Breadcrumbs.svelte';
-	import { companies } from '$lib/data/companies';
+	import { companiesData as companies } from '$lib/data/companies/index';
 	import { Code2, Brain, Puzzle, FileQuestion, ArrowRight } from 'lucide-svelte';
 
 	let companyId = '';
@@ -29,14 +29,14 @@
 			]} />
 			
 			<div class="flex items-center gap-5 mt-6">
-				<div class="w-16 h-16 rounded-2xl border border-border flex items-center justify-center text-3xl font-bold {company.color}">
-					{company.logoText}
+				<div class="w-16 h-16 rounded-2xl border border-border flex items-center justify-center text-3xl font-bold text-white bg-gradient-to-br {company.color}">
+					{company.initials}
 				</div>
 				<div>
 					<h1 class="text-3xl font-outfit font-semibold text-text-primary">
 						{company.name} Preparation
 					</h1>
-					<p class="text-text-secondary mt-1">{company.industry} • {company.location}</p>
+					<p class="text-text-secondary mt-1">{company.sector}</p>
 				</div>
 			</div>
 		</header>
