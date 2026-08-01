@@ -1,0 +1,1 @@
+<script lang="ts">import LearningCatalog from '$lib/components/placement/LearningCatalog.svelte'; import { mcqTopics } from '$lib/data/catalogs';</script><LearningCatalog title="Technical MCQs" subtitle="Reinforce fundamentals from operating systems to modern AI systems with explanation-first drills." categories={mcqTopics} basePath="/mcq"/>

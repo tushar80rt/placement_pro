@@ -1,0 +1,2 @@
+<script lang="ts">import LearningCatalog from '$lib/components/placement/LearningCatalog.svelte'; import { aptitudeCategories } from '$lib/data/catalogs';</script>
+<LearningCatalog title="Aptitude, made deliberate." subtitle="Master shortcuts and first principles across 200+ practice questions, with theory and worked solutions when you need them." categories={aptitudeCategories} basePath="/aptitude"/>

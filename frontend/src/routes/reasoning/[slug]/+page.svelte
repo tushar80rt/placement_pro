@@ -1,0 +1,1 @@
+<script lang="ts">import { page } from '$app/stores'; import LearningDetail from '$lib/components/placement/LearningDetail.svelte'; import { reasoningCategories } from '$lib/data/catalogs'; $: category = reasoningCategories.find(x => x.slug === $page.params.slug) ?? reasoningCategories[0];</script><LearningDetail {category} backPath="/reasoning"/>

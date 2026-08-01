@@ -1,0 +1,1 @@
+<script lang="ts">import LearningCatalog from '$lib/components/placement/LearningCatalog.svelte'; import { reasoningCategories } from '$lib/data/catalogs';</script><LearningCatalog title="Logical reasoning" subtitle="Build speed and clarity across the reasoning patterns that appear in screening tests." categories={reasoningCategories} basePath="/reasoning"/>

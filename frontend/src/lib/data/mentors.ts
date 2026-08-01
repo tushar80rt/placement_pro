@@ -1,0 +1,9 @@
+export type Mentor = { slug: string; name: string; badge: string; bio: string; offers: string[]; expertise: string[]; initials: string; tone: string };
+
+export const mentors: Mentor[] = [
+  { slug: 'shivaditya-singh', name: 'Shivaditya Singh', badge: 'Multiple Offers', bio: 'Practical guidance for turning campus preparation into confident interview performance.', offers: ['Accenture', 'Infosys', 'Capgemini', 'Cognizant'], expertise: ['DSA guidance', 'Mock interviews', 'Offer strategy'], initials: 'SS', tone: 'from-orange-400 to-rose-500' },
+  { slug: 'viraj-kumar', name: 'Viraj Kumar', badge: 'Software Engineer', bio: 'Focused, structured preparation for software engineering roles and assessments.', offers: ['Infosys', 'Cognizant'], expertise: ['Technical interviews', 'Project positioning', 'Aptitude'], initials: 'VK', tone: 'from-blue-500 to-indigo-600' },
+  { slug: 'piyush-kumar', name: 'Piyush Kumar', badge: 'Placement Mentor', bio: 'A calm, repeatable system for building consistency throughout placement season.', offers: ['Cognizant', 'Infosys'], expertise: ['Resume review', 'HR rounds', 'Interview preparation'], initials: 'PK', tone: 'from-violet-500 to-fuchsia-600' },
+  { slug: 'pawan-kumar', name: 'Pawan Kumar', badge: 'Campus Placement Expert', bio: 'Campus-specific preparation grounded in the patterns students see most often.', offers: ['TCS', 'Capgemini', 'Cognizant'], expertise: ['Campus placements', 'Group discussion', 'Mock interviews'], initials: 'PK', tone: 'from-emerald-500 to-teal-600' },
+  { slug: 'tushar-singh', name: 'Tushar Singh', badge: 'AI Engineer', bio: 'Modern AI engineering guidance for building credible projects and preparing for technical interviews.', offers: ['AI engineering', 'LLM systems', 'Applied ML'], expertise: ['AI projects', 'Python & systems', 'Technical interviews'], initials: 'TS', tone: 'from-cyan-500 to-blue-600' }
+];
