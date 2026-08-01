@@ -21,7 +21,7 @@
 <svelte:head><title>PlacementPro — Placement preparation, simplified</title></svelte:head>
 
 <div class="border-b border-border/60 bg-[#fff8f4]">
-	<div class="mx-auto flex min-h-10 max-w-7xl items-center justify-center gap-2 px-5 py-2 text-center text-xs text-text-secondary sm:text-sm">
+	<div class="mx-auto flex flex-col sm:flex-row min-h-10 max-w-7xl items-center justify-center gap-2 px-5 py-3 sm:py-2 text-center text-xs text-text-secondary sm:text-sm">
 		<span class="inline-flex items-center gap-1.5 font-bold text-text-primary"><Sparkles size={14} class="text-primary"/> New</span>
 		<span class="hidden h-3 w-px bg-border sm:block"></span>
 		<span>Company-specific mock assessments are now available.</span>
@@ -64,11 +64,11 @@
 			<div class="relative mx-auto mt-12 max-w-2xl group">
 				<div class="absolute -inset-1 rounded-3xl bg-gradient-to-r from-orange-400 via-rose-400 to-violet-400 opacity-25 blur-lg transition duration-1000 group-hover:opacity-50 group-hover:duration-200"></div>
 				<div class="relative flex items-center rounded-2xl border border-slate-200/50 bg-white/80 backdrop-blur-xl p-2.5 shadow-xl transition-all focus-within:ring-4 focus-within:ring-orange-500/20">
-					<div class="flex items-center justify-center w-12 h-12 rounded-xl bg-orange-50 text-orange-500">
+					<div class="hidden sm:flex items-center justify-center w-12 h-12 rounded-xl bg-orange-50 text-orange-500">
 						<Search size={24} />
 					</div>
-					<input aria-label="Search placement resources" class="min-w-0 flex-1 border-0 bg-transparent px-5 py-4 text-base md:text-lg font-medium text-slate-900 outline-none placeholder:text-slate-400" placeholder="Search aptitude, coding, companies..." />
-					<button class="rounded-xl bg-gradient-to-r from-orange-500 to-rose-500 px-8 py-4 text-base font-bold text-white shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
+					<input aria-label="Search placement resources" class="min-w-0 flex-1 border-0 bg-transparent px-3 sm:px-5 py-3 sm:py-4 text-sm sm:text-base md:text-lg font-medium text-slate-900 outline-none placeholder:text-slate-400" placeholder="Search topics..." />
+					<button class="rounded-xl bg-gradient-to-r from-orange-500 to-rose-500 px-4 sm:px-8 py-3 sm:py-4 text-sm sm:text-base font-bold text-white shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
 						Search
 					</button>
 				</div>
