@@ -1,7 +1,8 @@
 <script lang="ts">
-	import { ArrowRight, BookOpen, Brain, Building2, CheckCircle2, ChevronRight, Code2, FileText, GraduationCap, Search, Sparkles, Target, UsersRound } from 'lucide-svelte';
+	import { ArrowRight, BookOpen, Brain, Building2, CheckCircle2, ChevronRight, Code2, FileText, GraduationCap, Search, Sparkles, Target, UsersRound, Menu, X } from 'lucide-svelte';
 	import Footer from '$lib/components/ui/Footer.svelte';
 	import { mentors } from '$lib/data/mentors';
+	import AnimatedBackground from '$lib/components/background/AnimatedBackground.svelte';
 	const topics = ['Aptitude', 'Python practice', 'TCS NQT', 'DSA questions', 'Mock tests'];
 	const essentials = [
 		{ icon: Brain, title: 'Aptitude', text: 'Sharpen quant, reasoning, and verbal skills with topic-wise practice.', tone: 'bg-orange-100 text-orange-600' },
@@ -16,11 +17,20 @@
 		{ title: 'DSA practice', lessons: '150 curated problems', color: 'border-emerald-200 bg-emerald-50' }
 	];
 	const companies = ['TCS', 'Infosys', 'Accenture', 'Cognizant', 'Capgemini', 'Wipro', 'Deloitte', 'Zoho'];
+	
+	let isMenuOpen = false;
+	function toggleMenu() {
+		isMenuOpen = !isMenuOpen;
+		if (isMenuOpen) document.body.style.overflow = 'hidden';
+		else document.body.style.overflow = '';
+	}
 </script>
 
 <svelte:head><title>PlacementPro — Placement preparation, simplified</title></svelte:head>
 
-<div class="border-b border-border/60 bg-[#fff8f4]">
+<AnimatedBackground />
+
+<div class="border-b border-border/60 relative z-10">
 	<div class="mx-auto flex flex-col sm:flex-row min-h-10 max-w-7xl items-center justify-center gap-2 px-5 py-3 sm:py-2 text-center text-xs text-text-secondary sm:text-sm">
 		<span class="inline-flex items-center gap-1.5 font-bold text-text-primary"><Sparkles size={14} class="text-primary"/> New</span>
 		<span class="hidden h-3 w-px bg-border sm:block"></span>
@@ -33,15 +43,37 @@
 	<nav class="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-5 lg:px-8">
 		<a href="/" class="flex items-center gap-2.5 font-bold text-text-primary"><span class="grid h-9 w-9 place-items-center rounded-xl bg-primary text-lg font-extrabold text-white shadow-glow">P</span><span class="text-lg tracking-tight">PlacementPro</span></a>
 		<div class="hidden items-center gap-7 text-sm font-medium text-text-secondary md:flex"><a href="/dsa" class="hover:text-primary">Preparation</a><a href="/aptitude" class="hover:text-primary">Practice</a><a href="/companies" class="hover:text-primary">Companies</a><a href="/resources" class="hover:text-primary">Resources</a></div>
-		<div class="flex items-center gap-4 text-sm font-semibold"><a href="/dsa" class="hidden text-text-primary sm:block">Log in</a><a href="#prep" class="rounded-full bg-primary px-5 py-2.5 text-white transition hover:-translate-y-0.5 hover:shadow-glow">Start for free</a></div>
+		<div class="flex items-center gap-4 text-sm font-semibold">
+			<a href="/dsa" class="hidden text-text-primary sm:flex min-h-[44px] items-center">Log in</a>
+			<a href="#prep" class="hidden sm:flex rounded-full bg-primary px-5 py-2.5 text-white transition hover:-translate-y-0.5 hover:shadow-glow min-h-[44px] items-center">Start for free</a>
+			<button class="md:hidden flex h-11 w-11 items-center justify-center rounded-full bg-secondary-background text-text-primary transition hover:bg-border/50" on:click={toggleMenu} aria-label="Toggle menu">
+				{#if isMenuOpen}<X size={20}/>{:else}<Menu size={20}/>{/if}
+			</button>
+		</div>
 	</nav>
 </header>
 
+{#if isMenuOpen}
+<div class="fixed inset-0 z-50 flex flex-col bg-background/95 backdrop-blur-xl md:hidden" style="padding-top: env(safe-area-inset-top);">
+    <div class="flex h-[72px] items-center justify-between px-5 border-b border-border/50">
+        <a href="/" class="flex items-center gap-2.5 font-bold text-text-primary" on:click={toggleMenu}><span class="grid h-9 w-9 place-items-center rounded-xl bg-primary text-lg font-extrabold text-white shadow-glow">P</span><span class="text-lg tracking-tight">PlacementPro</span></a>
+        <button class="flex h-11 w-11 items-center justify-center rounded-full bg-secondary-background text-text-primary" on:click={toggleMenu} aria-label="Close menu"><X size={20}/></button>
+    </div>
+    <div class="flex-1 overflow-y-auto px-5 py-8 flex flex-col gap-6 text-lg font-bold">
+        <a href="/dsa" class="flex items-center justify-between border-b border-border/50 pb-4" on:click={toggleMenu}>Preparation <ArrowRight size={18} class="text-text-secondary"/></a>
+        <a href="/aptitude" class="flex items-center justify-between border-b border-border/50 pb-4" on:click={toggleMenu}>Practice <ArrowRight size={18} class="text-text-secondary"/></a>
+        <a href="/companies" class="flex items-center justify-between border-b border-border/50 pb-4" on:click={toggleMenu}>Companies <ArrowRight size={18} class="text-text-secondary"/></a>
+        <a href="/resources" class="flex items-center justify-between border-b border-border/50 pb-4" on:click={toggleMenu}>Resources <ArrowRight size={18} class="text-text-secondary"/></a>
+    </div>
+    <div class="p-5 border-t border-border/50 flex flex-col gap-4" style="padding-bottom: max(1.25rem, env(safe-area-inset-bottom));">
+        <a href="/dsa" class="flex h-12 w-full items-center justify-center rounded-xl border border-border font-bold text-text-primary" on:click={toggleMenu}>Log in</a>
+        <a href="#prep" class="flex h-12 w-full items-center justify-center rounded-xl bg-primary font-bold text-white shadow-glow" on:click={toggleMenu}>Start for free</a>
+    </div>
+</div>
+{/if}
+
 <main>
 	<section class="relative overflow-hidden px-5 pb-24 pt-20 text-center lg:pb-32 lg:pt-28">
-		<!-- Animated Gradient Blobs -->
-		<div class="absolute left-1/4 top-0 -z-10 h-96 w-96 -translate-x-1/2 translate-y-1/2 rounded-full bg-orange-400/20 blur-[100px] mix-blend-multiply animate-blob"></div>
-		<div class="absolute right-1/4 top-0 -z-10 h-96 w-96 translate-x-1/3 translate-y-1/4 rounded-full bg-violet-400/20 blur-[100px] mix-blend-multiply animate-blob animation-delay-2000"></div>
 
 		<div class="relative mx-auto max-w-5xl z-10">
 			<!-- Badge -->
@@ -85,7 +117,7 @@
 			</div>
 			
 			<!-- Stats Cards -->
-			<div class="mt-20 grid grid-cols-1 gap-6 sm:grid-cols-3 sm:gap-8 mx-auto max-w-4xl">
+			<div class="mt-20 grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-6 sm:gap-8 mx-auto max-w-4xl">
 				<div class="group relative rounded-3xl border border-slate-200/60 bg-white/60 p-8 text-center backdrop-blur-xl shadow-lg transition-all hover:-translate-y-2 hover:shadow-xl hover:border-orange-300/50">
 					<div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-orange-100 text-orange-600 shadow-inner group-hover:scale-110 transition-transform">
 						<Code2 size={28} />
@@ -111,24 +143,24 @@
 		</div>
 	</section>
 
-	<section id="prep" class="bg-white px-5 py-20 lg:py-24"><div class="mx-auto max-w-7xl"><div class="mb-11 flex flex-col justify-between gap-4 sm:flex-row sm:items-end"><div><p class="mb-3 text-sm font-bold uppercase tracking-[0.16em] text-primary">Placement essentials</p><h2 class="text-3xl font-extrabold sm:text-4xl">Everything you need to get interview-ready.</h2></div><a href="#features" class="group flex items-center gap-1 font-bold text-primary">View all resources <ArrowRight class="transition group-hover:translate-x-1" size={18}/></a></div><div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">{#each essentials as item}<article class="group rounded-3xl border border-border bg-background p-6 transition hover:-translate-y-1 hover:bg-white hover:shadow-card"><div class="grid h-12 w-12 place-items-center rounded-2xl {item.tone}"><svelte:component this={item.icon} size={23}/></div><h3 class="mt-6 text-xl font-bold">{item.title}</h3><p class="mt-2 text-sm leading-6 text-text-secondary">{item.text}</p><a href="/resources" class="mt-5 flex items-center gap-1 text-sm font-bold text-primary">Explore <ChevronRight size={16}/></a></article>{/each}</div></div></section>
+	<section id="prep" class="relative z-10 px-5 py-20 lg:py-24"><div class="mx-auto max-w-7xl"><div class="mb-11 flex flex-col justify-between gap-4 sm:flex-row sm:items-end"><div><p class="mb-3 text-sm font-bold uppercase tracking-[0.16em] text-primary">Placement essentials</p><h2 class="text-3xl font-extrabold sm:text-4xl">Everything you need to get interview-ready.</h2></div><a href="#features" class="group flex items-center gap-1 font-bold text-primary">View all resources <ArrowRight class="transition group-hover:translate-x-1" size={18}/></a></div><div class="grid gap-5 grid-cols-[repeat(auto-fit,minmax(280px,1fr))]">{#each essentials as item}<article class="group rounded-3xl border border-border bg-background p-6 transition hover:-translate-y-1 hover:bg-white hover:shadow-card"><div class="grid h-12 w-12 place-items-center rounded-2xl {item.tone}"><svelte:component this={item.icon} size={23}/></div><h3 class="mt-6 text-xl font-bold">{item.title}</h3><p class="mt-2 text-sm leading-6 text-text-secondary">{item.text}</p><a href="/resources" class="mt-5 flex items-center gap-1 text-sm font-bold text-primary">Explore <ChevronRight size={16}/></a></article>{/each}</div></div></section>
 
-	<section id="features" class="px-5 py-20 lg:py-24"><div class="mx-auto max-w-7xl"><div class="mx-auto mb-11 max-w-2xl text-center"><p class="mb-3 text-sm font-bold uppercase tracking-[0.16em] text-primary">Learn by doing</p><h2 class="text-3xl font-extrabold sm:text-4xl">Small steps. Serious progress.</h2><p class="mt-4 leading-7 text-text-secondary">Pick a skill, follow the roadmap, and see exactly what to practise next.</p></div><div class="grid gap-5 md:grid-cols-2 lg:grid-cols-4">{#each tracks as track}<a href="/dsa" class="group rounded-2xl border p-5 transition hover:-translate-y-1 hover:shadow-card {track.color}"><div class="flex justify-between"><Target size={22}/><ArrowRight size={18} class="opacity-50 transition group-hover:translate-x-1 group-hover:opacity-100"/></div><h3 class="mt-12 text-lg font-bold">{track.title}</h3><p class="mt-1 text-sm text-text-secondary">{track.lessons}</p></a>{/each}</div></div></section>
+	<section id="features" class="relative z-10 px-5 py-20 lg:py-24"><div class="mx-auto max-w-7xl"><div class="mx-auto mb-11 max-w-2xl text-center"><p class="mb-3 text-sm font-bold uppercase tracking-[0.16em] text-primary">Learn by doing</p><h2 class="text-3xl font-extrabold sm:text-4xl">Small steps. Serious progress.</h2><p class="mt-4 leading-7 text-text-secondary">Pick a skill, follow the roadmap, and see exactly what to practise next.</p></div><div class="grid gap-5 grid-cols-[repeat(auto-fit,minmax(280px,1fr))]">{#each tracks as track}<a href="/dsa" class="group rounded-2xl border p-5 transition hover:-translate-y-1 hover:shadow-card {track.color}"><div class="flex justify-between"><Target size={22}/><ArrowRight size={18} class="opacity-50 transition group-hover:translate-x-1 group-hover:opacity-100"/></div><h3 class="mt-12 text-lg font-bold">{track.title}</h3><p class="mt-1 text-sm text-text-secondary">{track.lessons}</p></a>{/each}</div></div></section>
 
-	<section id="companies" class="px-5 pb-20 lg:pb-24"><div class="mx-auto max-w-7xl rounded-[2rem] bg-[#17202b] px-6 py-12 text-white sm:px-10 lg:flex lg:items-center lg:gap-16 lg:px-16"><div class="max-w-md"><p class="mb-3 text-sm font-bold uppercase tracking-[0.16em] text-orange-300">Company-specific preparation</p><h2 class="text-3xl font-extrabold leading-tight sm:text-4xl">Know what your dream company is looking for.</h2><p class="mt-5 leading-7 text-slate-300">Get familiar with assessments, core topics, interview questions, and preparation plans tailored to the roles you want.</p><a href="/company-hub" class="mt-7 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-bold hover:bg-[#df5642]">Explore company hub <ArrowRight size={17}/></a></div><div class="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:mt-0 lg:flex-1">{#each companies as company}<a href="/company-hub" class="rounded-xl border border-white/10 bg-white/5 px-4 py-5 text-center text-sm font-bold text-white transition hover:border-orange-300/60 hover:bg-white/10">{company}</a>{/each}</div></div></section>
+	<section id="companies" class="relative z-10 px-5 pb-20 lg:pb-24"><div class="mx-auto max-w-7xl rounded-[2rem] bg-[#17202b] px-6 py-12 text-white sm:px-10 lg:flex lg:items-center lg:gap-16 lg:px-16"><div class="max-w-md"><p class="mb-3 text-sm font-bold uppercase tracking-[0.16em] text-orange-300">Company-specific preparation</p><h2 class="text-3xl font-extrabold leading-tight sm:text-4xl">Know what your dream company is looking for.</h2><p class="mt-5 leading-7 text-slate-300">Get familiar with assessments, core topics, interview questions, and preparation plans tailored to the roles you want.</p><a href="/company-hub" class="mt-7 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-bold hover:bg-[#df5642]">Explore company hub <ArrowRight size={17}/></a></div><div class="mt-10 grid grid-cols-[repeat(auto-fit,minmax(120px,1fr))] gap-3 lg:mt-0 lg:flex-1">{#each companies as company}<a href="/company-hub" class="rounded-xl border border-white/10 bg-white/5 px-4 py-5 text-center text-sm font-bold text-white transition hover:border-orange-300/60 hover:bg-white/10">{company}</a>{/each}</div></div></section>
 
-	<section id="guidance" class="bg-white px-5 py-20"><div class="mx-auto grid max-w-5xl items-center gap-10 rounded-[2rem] bg-secondary-background px-7 py-10 md:grid-cols-[1fr_auto] md:px-12 md:py-14"><div><div class="mb-5 grid h-14 w-14 place-items-center rounded-2xl bg-white text-primary shadow-card"><GraduationCap size={28}/></div><h2 class="text-3xl font-extrabold">Not sure where to begin?</h2><p class="mt-3 max-w-xl leading-7 text-text-secondary">Tell us your target role and graduation year. We’ll help you build a clear, practical preparation path.</p></div><a href="/community" class="inline-flex items-center justify-center gap-2 rounded-full bg-text-primary px-6 py-3.5 text-sm font-bold text-white hover:bg-slate-700">Get free guidance <ArrowRight size={17}/></a></div></section>
+	<section id="guidance" class="relative z-10 px-5 py-20"><div class="mx-auto grid max-w-5xl items-center gap-10 rounded-[2rem] bg-secondary-background px-7 py-10 md:grid-cols-[1fr_auto] md:px-12 md:py-14"><div><div class="mb-5 grid h-14 w-14 place-items-center rounded-2xl bg-white text-primary shadow-card"><GraduationCap size={28}/></div><h2 class="text-3xl font-extrabold">Not sure where to begin?</h2><p class="mt-3 max-w-xl leading-7 text-text-secondary">Tell us your target role and graduation year. We’ll help you build a clear, practical preparation path.</p></div><a href="/community" class="inline-flex items-center justify-center gap-2 rounded-full bg-text-primary px-6 py-3.5 text-sm font-bold text-white hover:bg-slate-700">Get free guidance <ArrowRight size={17}/></a></div></section>
 </main>
 
-	<section class="mx-auto max-w-7xl px-5 py-10 md:px-8"><a href="/resources/ai-engineer-questions" class="group relative block overflow-hidden rounded-3xl bg-gradient-to-r from-[#17202b] to-[#263e5d] p-6 text-white shadow-card transition duration-300 hover:-translate-y-1 hover:shadow-card-hover md:p-8"><div class="absolute -right-12 -top-16 h-48 w-48 rounded-full bg-primary/25 blur-3xl"></div><div class="relative flex flex-col justify-between gap-6 md:flex-row md:items-center"><div><p class="flex items-center gap-2 text-xs font-bold uppercase tracking-[.18em] text-orange-200"><Sparkles size={14}/> Trending now · 2026 edition</p><h2 class="mt-3 max-w-2xl text-2xl font-extrabold md:text-3xl">100 Must-Prepare AI Engineer Interview Questions</h2><p class="mt-2 max-w-2xl text-sm text-slate-300">For AI Engineer, LLM Engineer, GenAI Engineer and Applied AI roles.</p></div><span class="inline-flex shrink-0 items-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-bold text-[#17202b] transition group-hover:bg-orange-100">Read the pack <ArrowRight size={16}/></span></div></a></section>
+	<section class="relative z-10 mx-auto max-w-7xl px-5 py-10 md:px-8"><a href="/resources/ai-engineer-questions" class="group relative block overflow-hidden rounded-3xl bg-gradient-to-r from-[#17202b] to-[#263e5d] p-6 text-white shadow-card transition duration-300 hover:-translate-y-1 hover:shadow-card-hover md:p-8"><div class="absolute -right-12 -top-16 h-48 w-48 rounded-full bg-primary/25 blur-3xl"></div><div class="relative flex flex-col justify-between gap-6 md:flex-row md:items-center"><div><p class="flex items-center gap-2 text-xs font-bold uppercase tracking-[.18em] text-orange-200"><Sparkles size={14}/> Trending now · 2026 edition</p><h2 class="mt-3 max-w-2xl text-2xl font-extrabold md:text-3xl">100 Must-Prepare AI Engineer Interview Questions</h2><p class="mt-2 max-w-2xl text-sm text-slate-300">For AI Engineer, LLM Engineer, GenAI Engineer and Applied AI roles.</p></div><span class="inline-flex shrink-0 items-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-bold text-[#17202b] transition group-hover:bg-orange-100">Read the pack <ArrowRight size={16}/></span></div></a></section>
 
-	<section id="mentors" class="border-t border-border/60 bg-[#17202b] py-20 text-white">
+	<section id="mentors" class="relative z-10 border-t border-border/60 bg-[#17202b] py-20 text-white">
 		<div class="mx-auto max-w-7xl px-5 md:px-8">
 			<div class="flex flex-col justify-between gap-4 md:flex-row md:items-end">
 				<div><p class="text-xs font-bold uppercase tracking-[.18em] text-orange-200">1:1 mentorship</p><h2 class="mt-3 text-3xl font-extrabold">Meet our mentors.</h2></div>
 				<p class="max-w-md text-sm leading-6 text-slate-300">Personal guidance from people who have navigated campus placements and software interviews themselves.</p>
 			</div>
-			<div class="mt-9 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+			<div class="mt-9 grid gap-4 grid-cols-[repeat(auto-fit,minmax(280px,1fr))]">
 				{#each mentors as mentor}
 					<article class="rounded-2xl border border-white/10 bg-white/[.06] p-5 transition duration-300 hover:-translate-y-1 hover:bg-white/[.1]">
 						<div class="flex items-center gap-3"><div class="grid h-12 w-12 place-items-center rounded-full bg-gradient-to-br {mentor.tone} text-sm font-black">{mentor.initials}</div><div><h3 class="font-extrabold">{mentor.name}</h3><p class="text-xs text-slate-300">Placement Mentor</p></div></div>
@@ -140,7 +172,9 @@
 		</div>
 	</section>
 
-	<Footer />
+	<div class="relative z-10">
+		<Footer />
+	</div>
 
 <style>
 	@keyframes blob {

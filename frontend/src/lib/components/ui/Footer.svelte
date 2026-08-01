@@ -7,7 +7,7 @@
 >
   <!-- Logo -->
   <div class="z-10 mb-6">
-    <h2 class="text-3xl font-extrabold text-orange-500 tracking-tight">
+    <h2 class="text-3xl font-extrabold tracking-tight text-white">
       PlacementPro
     </h2>
   </div>
@@ -55,7 +55,14 @@
         <a href="/" class="hover:text-white transition-colors">Changelog</a>
       </li>
       <li><a href="/" class="hover:text-white transition-colors">Blog</a></li>
-<li><a href="https://www.example.com/100-must-prepare-ai-engineer-interview-questions-2026" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">AI Interview Questions</a></li>
+      <li>
+        <a
+          href="https://www.example.com/100-must-prepare-ai-engineer-interview-questions-2026"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hover:text-white transition-colors">AI Interview Questions</a
+        >
+      </li>
     </ul>
   </div>
 
@@ -64,7 +71,7 @@
     class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[20%] w-full flex justify-center pointer-events-none select-none overflow-hidden h-64"
   >
     <span
-      class="text-[11vw] font-black tracking-tighter text-white/[0.03] leading-none whitespace-nowrap"
+      class="text-[11vw] font-black tracking-tighter leading-none whitespace-nowrap text-slate-800/80"
     >
       PLACEMENTPRO
     </span>
@@ -74,19 +81,19 @@
   <div class="relative z-20 w-full flex justify-center mt-12 mb-8">
     <!-- Horizontal Line -->
     <div
-      class="absolute top-1/2 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-orange-500/30 to-transparent -translate-y-1/2"
+      class="absolute top-1/2 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-y-1/2"
     ></div>
 
-    <!-- Central Orange Button -->
+    <!-- Central White Button -->
     <div
-      class="relative w-24 h-24 bg-[#ff6b2b] rounded-2xl flex items-center justify-center shadow-[0_0_60px_rgba(255,107,43,0.5)] border-[4px] border-[#0a0a0a] cursor-pointer hover:scale-105 transition-transform duration-300"
+      class="relative w-24 h-24 bg-white rounded-2xl flex items-center justify-center shadow-[0_0_40px_rgba(255,255,255,0.15)] border-[4px] border-[#0a0a0a] cursor-pointer hover:scale-105 transition-transform duration-300"
     >
       <!-- Inner Dark Container for Logo -->
       <div
         class="w-[85%] h-[85%] bg-[#0a0a0a] rounded-xl flex items-center justify-center"
       >
         <!-- Logo P (stylized) -->
-        <span class="text-4xl font-bold italic text-[#ff6b2b]">P</span>
+        <span class="text-4xl font-bold italic text-white">P</span>
       </div>
     </div>
   </div>
