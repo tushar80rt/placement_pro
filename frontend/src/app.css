@@ -9,7 +9,7 @@
     @apply bg-background text-text-primary antialiased;
     font-family: 'DM Sans', sans-serif;
     min-height: 100%;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
   
   h1, h2, h3, h4, h5, h6 {
@@ -45,25 +45,4 @@
     background-image: linear-gradient(to right, rgba(242,103,82,.035) 1px, transparent 1px), linear-gradient(to bottom, rgba(242,103,82,.035) 1px, transparent 1px);
     background-size: 32px 32px;
   }
-}
-
-/* Lenis recommended CSS */
-html.lenis, html.lenis body {
-  height: auto;
-}
-
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-
-.lenis.lenis-stopped {
-  overflow: hidden;
-}
-
-.lenis.lenis-smooth iframe {
-  pointer-events: none;
 }
