@@ -40,5 +40,5 @@ A bright, friendly placement-prep landing page. It uses a spacious navigation ba
 5. Company preparation list
 6. CTA and footer
 
-## Agent Build Instructions
+## Agent Build 
 Create an original landing page inspired by the above hierarchy. Do not reuse the reference’s brand assets, logos, copy, or exact illustrations. Preserve a light, optimistic aesthetic and prioritize scan-friendly grouping of placement resources.
