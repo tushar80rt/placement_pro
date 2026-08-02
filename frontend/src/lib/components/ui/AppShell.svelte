@@ -44,12 +44,12 @@
 
     <nav class="mt-7 space-y-1.5">
       {#each items as item}
+        {@const Icon = item.icon}
         <a
           href={item.href}
           class="flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-semibold transition {$page.url.pathname === item.href || $page.url.pathname.startsWith(item.href) ? 'bg-secondary-background text-text-primary shadow-2xs font-bold' : 'text-text-secondary hover:bg-secondary-background/60 hover:text-text-primary'}"
         >
-          <svelte:component
-            this={item.icon}
+          <Icon
             size={18}
             class={$page.url.pathname.startsWith(item.href) ? 'text-primary' : 'text-slate-400'}
           />
@@ -64,12 +64,13 @@
     <div class="fixed inset-x-0 top-16 z-40 border-b border-border bg-[#fcfbfa] p-4 shadow-xl lg:hidden">
       <nav class="grid grid-cols-2 gap-2">
         {#each items as item}
+          {@const Icon = item.icon}
           <a
             onclick={() => open = false}
             href={item.href}
             class="flex items-center gap-2.5 rounded-xl bg-secondary-background/70 p-3 text-sm font-bold text-slate-800 transition hover:bg-primary hover:text-white"
           >
-            <svelte:component this={item.icon} size={17}/>
+            <Icon size={17}/>
             {item.label}
           </a>
         {/each}

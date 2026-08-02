@@ -2,11 +2,11 @@
   import { page } from '$app/stores';
   import { dsaQuestions as neetcode150 } from '$lib/data/catalogs';
   import { ExternalLink, ChevronLeft, Check, Lightbulb, PlayCircle, Bookmark } from 'lucide-svelte';
-  $: question = neetcode150.find((item) => item.id === $page.params.slug) || neetcode150[0];
-  $: questionIndex = neetcode150.findIndex((item) => item.id === question.id);
   import { solvedQuestions, bookmarkedQuestions } from '$lib/stores/progress';
-  $: isSolved = $solvedQuestions.includes(question.id);
-  $: isBookmarked = $bookmarkedQuestions.includes(question.id);
+  let question = $derived(neetcode150.find((item) => item.id === $page.params.slug) || neetcode150[0]);
+  let questionIndex = $derived(neetcode150.findIndex((item) => item.id === question.id));
+  let isSolved = $derived($solvedQuestions.includes(question.id));
+  let isBookmarked = $derived($bookmarkedQuestions.includes(question.id));
   
   function toggleSolved() {
     if (isSolved) $solvedQuestions = $solvedQuestions.filter(id => id !== question.id);

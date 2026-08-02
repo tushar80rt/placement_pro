@@ -1,7 +1,13 @@
 <script lang="ts">
-  export let reducedMotion = false;
-  export let isMobile = false;
-  export let isLowEnd = false;
+  let { 
+    reducedMotion = false, 
+    isMobile = false, 
+    isLowEnd = false 
+  }: { 
+    reducedMotion?: boolean; 
+    isMobile?: boolean; 
+    isLowEnd?: boolean; 
+  } = $props();
 </script>
 
 {#if !isLowEnd}

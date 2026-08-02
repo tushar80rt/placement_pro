@@ -14,22 +14,22 @@
   } from 'lucide-svelte';
 
   // Active chapter
-  let selectedChapterId = 'percentage';
-  $: activeChapter = aptitudeChapters.find(c => c.id === selectedChapterId) || aptitudeChapters[0];
+  let selectedChapterId = $state('percentage');
+  let activeChapter = $derived(aptitudeChapters.find(c => c.id === selectedChapterId) || aptitudeChapters[0]);
 
   // Filters & Search
-  let searchQuery = '';
-  let selectedCompany = 'All';
-  let selectedDifficulty = 'All';
-  let filterStatus = 'all'; // 'all' | 'solved' | 'unsolved' | 'bookmarked'
-  let showCheatSheet = false;
-  let expandedQuestions: Record<string, boolean> = {};
-  let selectedAnswers: Record<string, string> = {};
-  let showAnswerFeedback: Record<string, boolean> = {};
+  let searchQuery = $state('');
+  let selectedCompany = $state('All');
+  let selectedDifficulty = $state('All');
+  let filterStatus = $state('all'); // 'all' | 'solved' | 'unsolved' | 'bookmarked'
+  let showCheatSheet = $state(false);
+  let expandedQuestions = $state<Record<string, boolean>>({});
+  let selectedAnswers = $state<Record<string, string>>({});
+  let showAnswerFeedback = $state<Record<string, boolean>>({});
 
   // User-scoped Progress Tracking reactive shortcuts
-  $: solvedQuestions = $aptitudeProgress.solved;
-  $: bookmarkedQuestions = $aptitudeProgress.bookmarked;
+  let solvedQuestions = $derived($aptitudeProgress.solved);
+  let bookmarkedQuestions = $derived($aptitudeProgress.bookmarked);
 
   function toggleSolved(qId: string) {
     toggleAptitudeSolved(qId);
@@ -41,14 +41,11 @@
 
   function toggleExpand(qId: string) {
     expandedQuestions[qId] = !expandedQuestions[qId];
-    expandedQuestions = { ...expandedQuestions };
   }
 
   function selectOption(qId: string, option: string, correctAns?: string) {
     selectedAnswers[qId] = option;
     showAnswerFeedback[qId] = true;
-    selectedAnswers = { ...selectedAnswers };
-    showAnswerFeedback = { ...showAnswerFeedback };
 
     if (correctAns && option === correctAns) {
       if (!solvedQuestions[qId]) {
@@ -58,7 +55,7 @@
   }
 
   // All unique companies for filter
-  $: allCompanies = [
+  const allCompanies = [
     'All',
     'TCS',
     'Infosys',
@@ -73,7 +70,7 @@
   ];
 
   // Filter questions
-  $: filteredQuestions = activeChapter.questions.filter(q => {
+  let filteredQuestions = $derived(activeChapter.questions.filter(q => {
     const matchesSearch = !searchQuery || 
       q.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
       q.companies.some(c => c.toLowerCase().includes(searchQuery.toLowerCase())) ||
@@ -88,16 +85,16 @@
     if (filterStatus === 'bookmarked') matchesStatus = !!bookmarkedQuestions[q.id];
 
     return matchesSearch && matchesCompany && matchesDiff && matchesStatus;
-  });
+  }));
 
   // Calculate chapter progress
-  $: chapterSolvedCount = activeChapter.questions.filter(q => solvedQuestions[q.id]).length;
-  $: chapterProgressPct = Math.round((chapterSolvedCount / activeChapter.questions.length) * 100);
+  let chapterSolvedCount = $derived(activeChapter.questions.filter(q => solvedQuestions[q.id]).length);
+  let chapterProgressPct = $derived(Math.round((chapterSolvedCount / activeChapter.questions.length) * 100));
 
   // Overall totals across all 22 chapters
-  $: totalAllQuestions = aptitudeChapters.reduce((acc, c) => acc + c.questions.length, 0);
-  $: totalAllSolved = aptitudeChapters.reduce((acc, c) => acc + c.questions.filter(q => solvedQuestions[q.id]).length, 0);
-  $: overallProgressPct = Math.round((totalAllSolved / totalAllQuestions) * 100) || 0;
+  let totalAllQuestions = $derived(aptitudeChapters.reduce((acc, c) => acc + c.questions.length, 0));
+  let totalAllSolved = $derived(aptitudeChapters.reduce((acc, c) => acc + c.questions.filter(q => solvedQuestions[q.id]).length, 0));
+  let overallProgressPct = $derived(Math.round((totalAllSolved / totalAllQuestions) * 100) || 0);
 
   // Company badge color helper
   function getCompanyBadgeClass(company: string) {
@@ -179,7 +176,7 @@
             <BookOpen class="w-4 h-4 text-emerald-400" /> Select Chapter ({aptitudeChapters.length})
           </span>
           <button 
-            on:click={() => showCheatSheet = !showCheatSheet}
+            onclick={() => showCheatSheet = !showCheatSheet}
             class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 transition-all flex items-center gap-1.5 cursor-pointer"
           >
             <Zap class="w-3.5 h-3.5" />
@@ -194,7 +191,7 @@
             {@const isDone = chSolved === ch.questions.length}
 
             <button
-              on:click={() => { selectedChapterId = ch.id; searchQuery = ''; }}
+              onclick={() => { selectedChapterId = ch.id; searchQuery = ''; }}
               class="flex-shrink-0 px-4 py-3 rounded-xl border text-left transition-all duration-200 cursor-pointer {
                 isCurrent 
                   ? 'bg-emerald-500/15 border-emerald-500/50 shadow-lg shadow-emerald-950/40' 
@@ -237,8 +234,8 @@
             </h3>
           </div>
           <button 
-            on:click={() => showCheatSheet = false}
-            class="text-xs text-slate-400 hover:text-white p-1"
+            onclick={() => showCheatSheet = false}
+            class="text-xs text-slate-400 hover:text-white p-1 cursor-pointer"
           >
             ✕ Close
           </button>
@@ -310,26 +307,26 @@
           <!-- Status Filter Tabs -->
           <div class="inline-flex rounded-xl bg-slate-950/80 p-1 border border-slate-800 text-xs">
             <button
-              on:click={() => filterStatus = 'all'}
-              class="px-2.5 py-1 rounded-lg transition-all {filterStatus === 'all' ? 'bg-emerald-500/20 text-emerald-400 font-semibold' : 'text-slate-400 hover:text-slate-200'}"
+              onclick={() => filterStatus = 'all'}
+              class="px-2.5 py-1 rounded-lg transition-all cursor-pointer {filterStatus === 'all' ? 'bg-emerald-500/20 text-emerald-400 font-semibold' : 'text-slate-400 hover:text-slate-200'}"
             >
               All ({activeChapter.questions.length})
             </button>
             <button
-              on:click={() => filterStatus = 'unsolved'}
-              class="px-2.5 py-1 rounded-lg transition-all {filterStatus === 'unsolved' ? 'bg-emerald-500/20 text-emerald-400 font-semibold' : 'text-slate-400 hover:text-slate-200'}"
+              onclick={() => filterStatus = 'unsolved'}
+              class="px-2.5 py-1 rounded-lg transition-all cursor-pointer {filterStatus === 'unsolved' ? 'bg-emerald-500/20 text-emerald-400 font-semibold' : 'text-slate-400 hover:text-slate-200'}"
             >
               Unsolved
             </button>
             <button
-              on:click={() => filterStatus = 'solved'}
-              class="px-2.5 py-1 rounded-lg transition-all {filterStatus === 'solved' ? 'bg-emerald-500/20 text-emerald-400 font-semibold' : 'text-slate-400 hover:text-slate-200'}"
+              onclick={() => filterStatus = 'solved'}
+              class="px-2.5 py-1 rounded-lg transition-all cursor-pointer {filterStatus === 'solved' ? 'bg-emerald-500/20 text-emerald-400 font-semibold' : 'text-slate-400 hover:text-slate-200'}"
             >
               Solved ({chapterSolvedCount})
             </button>
             <button
-              on:click={() => filterStatus = 'bookmarked'}
-              class="px-2.5 py-1 rounded-lg transition-all {filterStatus === 'bookmarked' ? 'bg-amber-500/20 text-amber-400 font-semibold' : 'text-slate-400 hover:text-slate-200'}"
+              onclick={() => filterStatus = 'bookmarked'}
+              class="px-2.5 py-1 rounded-lg transition-all cursor-pointer {filterStatus === 'bookmarked' ? 'bg-amber-500/20 text-amber-400 font-semibold' : 'text-slate-400 hover:text-slate-200'}"
             >
               ★ Saved
             </button>
@@ -361,7 +358,7 @@
           Try resetting the search query or company filter to see questions.
         </p>
         <button
-          on:click={() => { searchQuery = ''; selectedCompany = 'All'; filterStatus = 'all'; }}
+          onclick={() => { searchQuery = ''; selectedCompany = 'All'; filterStatus = 'all'; }}
           class="mt-4 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-white transition-all cursor-pointer"
         >
           Reset Filters
@@ -386,7 +383,7 @@
               <div class="flex items-start gap-3.5 flex-1">
                 <!-- Checkbox / Number -->
                 <button
-                  on:click={() => toggleSolved(q.id)}
+                  onclick={() => toggleSolved(q.id)}
                   title={isSolved ? 'Mark as unsolved' : 'Mark as solved'}
                   class="mt-0.5 flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center transition-all cursor-pointer {
                     isSolved 
@@ -435,7 +432,7 @@
               <!-- Top Right Actions (Bookmark & Expand) -->
               <div class="flex items-center gap-1.5 flex-shrink-0">
                 <button
-                  on:click={() => toggleBookmark(q.id)}
+                  onclick={() => toggleBookmark(q.id)}
                   title={isBookmarked ? 'Remove bookmark' : 'Bookmark question'}
                   class="p-2 rounded-xl transition-all cursor-pointer {
                     isBookmarked 
@@ -447,7 +444,7 @@
                 </button>
 
                 <button
-                  on:click={() => toggleExpand(q.id)}
+                  onclick={() => toggleExpand(q.id)}
                   class="px-3 py-2 rounded-xl bg-slate-950/60 hover:bg-slate-800 border border-slate-800 text-xs font-semibold text-slate-300 transition-all flex items-center gap-1 cursor-pointer"
                 >
                   <span>{isExpanded ? 'Hide' : 'Solution'}</span>
@@ -469,7 +466,7 @@
                   {@const isCorrect = q.correctAnswer === opt}
 
                   <button
-                    on:click={() => selectOption(q.id, opt, q.correctAnswer)}
+                    onclick={() => selectOption(q.id, opt, q.correctAnswer)}
                     class="px-3.5 py-2.5 rounded-xl border text-left transition-all duration-150 flex items-center justify-between gap-2 cursor-pointer {
                       showFeedback && isSelected && isCorrect ? 'bg-emerald-500/20 border-emerald-500 text-emerald-300 font-bold' :
                       showFeedback && isSelected && !isCorrect ? 'bg-rose-500/20 border-rose-500 text-rose-300' :

@@ -3,20 +3,24 @@
   import CompanyCard from '$lib/components/placement/CompanyCard.svelte';
   import { placementCompanies } from '$lib/data/catalogs';
 
-  let query = '';
+  let query = $state('');
 
   // Derived filtered list
-  $: visible = placementCompanies.filter(
+  let visible = $derived(placementCompanies.filter(
     company => company.name.toLowerCase().includes(query.toLowerCase())
-  );
+  ));
 
   // Incremental rendering — 20 cards initially
   const PAGE_SIZE = 20;
-  let visibleCount = PAGE_SIZE;
-  $: { visible; visibleCount = PAGE_SIZE; } // reset on filter change
+  let visibleCount = $state(PAGE_SIZE);
+  
+  $effect(() => {
+    visible;
+    visibleCount = PAGE_SIZE;
+  }); // reset on filter change
 
-  $: displayedCompanies = visible.slice(0, visibleCount);
-  $: hasMore = visible.length > visibleCount;
+  let displayedCompanies = $derived(visible.slice(0, visibleCount));
+  let hasMore = $derived(visible.length > visibleCount);
 
   function loadMore() {
     visibleCount = Math.min(visibleCount + PAGE_SIZE, visible.length);

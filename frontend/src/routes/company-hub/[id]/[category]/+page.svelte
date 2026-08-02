@@ -6,15 +6,9 @@
 	import { aptitudeQuestions } from '$lib/data/aptitude/index';
 	import { ExternalLink, CheckCircle2, ChevronDown } from 'lucide-svelte';
 
-	let companyId = '';
-	let categoryId = '';
-	let company: any = null;
-
-	$: {
-		companyId = $page.params.id || '';
-		categoryId = $page.params.category || '';
-		company = companies.find(c => c.id === companyId);
-	}
+	let companyId = $derived($page.params.id || '');
+	let categoryId = $derived($page.params.category || '');
+	let company = $derived(companies.find(c => c.id === companyId));
 
 	const categoryTitles: Record<string, string> = {
 		'dsa': 'DSA Sheet',
@@ -23,7 +17,7 @@
 		'technical-mcq': 'Technical MCQ'
 	};
 
-	let openQuestionId: string | null = null;
+	let openQuestionId = $state<string | null>(null);
 	function toggleQuestion(id: string) {
 		openQuestionId = openQuestionId === id ? null : id;
 	}
@@ -90,7 +84,7 @@
 						 categoryId === 'logical-reasoning' && q.topic === 'Logical Reasoning' || 
 						 categoryId === 'technical-mcq' && q.topic === 'Technical MCQ'}
 						<div class="border border-border/50 rounded-xl bg-card-background/20 overflow-hidden">
-							<button class="w-full text-left px-6 py-4 flex items-center justify-between hover:bg-secondary-background/30 transition-colors" on:click={() => toggleQuestion(q.id)}>
+							<button class="w-full text-left px-6 py-4 flex items-center justify-between hover:bg-secondary-background/30 transition-colors cursor-pointer" onclick={() => toggleQuestion(q.id)}>
 								<div class="flex gap-4 items-start">
 									<span class="text-sm font-mono text-text-secondary mt-0.5">Q{q.id}.</span>
 									<div>

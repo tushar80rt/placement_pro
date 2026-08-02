@@ -4,7 +4,7 @@
   import { placementCompanies } from '$lib/data/catalogs';
 
   // Memoize — only recompute when slug changes
-  $: company = placementCompanies.find(item => item.id === $page.params.slug) ?? placementCompanies[0];
+  let company = $derived(placementCompanies.find(item => item.id === $page.params.slug) ?? placementCompanies[0]);
 
   // Static module config — not reactive
   const modules = [
@@ -115,11 +115,12 @@
     <h2 class="mt-2 text-2xl font-extrabold">Pick up where you need confidence.</h2>
     <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {#each modules as mod}
+        {@const Icon = mod.icon}
         <a
           href="/company/{company.id}/{mod.path}"
           class="group rounded-3xl border border-border/70 bg-white p-6 shadow-card transition hover:-translate-y-1 hover:border-primary/30 hover:shadow-card-hover"
         >
-          <mod.icon size={21} class="text-primary" aria-hidden="true" />
+          <Icon size={21} class="text-primary" aria-hidden="true" />
           <h3 class="mt-7 font-extrabold">{mod.label}</h3>
           <p class="mt-2 text-sm text-text-secondary">{mod.copy}</p>
           <ArrowRight size={17} class="mt-5 transition group-hover:translate-x-1" aria-hidden="true" />

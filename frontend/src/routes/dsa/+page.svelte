@@ -4,36 +4,39 @@
   import QuestionCard from '$lib/components/placement/QuestionCard.svelte';
   import { solvedQuestions, bookmarkedQuestions } from '$lib/stores/progress';
 
-  let query = '';
-  let active = 'All';
-  let activeDifficulty = 'All';
+  let query = $state('');
+  let active = $state('All');
+  let activeDifficulty = $state('All');
 
   // Compute topics once — not reactive, data is static
   const topics = Array.from(new Set(neetcode150.map(q => q.category)));
 
   // Filtered list — reactive only to query/active/difficulty
-  $: filtered = neetcode150.filter(q =>
+  let filtered = $derived(neetcode150.filter(q =>
     (!query || q.title.toLowerCase().includes(query.toLowerCase()) || q.category.toLowerCase().includes(query.toLowerCase())) &&
     (active === 'All' || q.category === active) &&
     (activeDifficulty === 'All' || q.difficulty === activeDifficulty)
-  );
+  ));
 
   // Incremental rendering — start with 30, load more on demand
   const PAGE_SIZE = 30;
-  let visibleCount = PAGE_SIZE;
+  let visibleCount = $state(PAGE_SIZE);
 
   // Reset pagination whenever filter changes
-  $: { filtered; visibleCount = PAGE_SIZE; }
+  $effect(() => {
+    filtered;
+    visibleCount = PAGE_SIZE;
+  });
 
-  $: visibleItems = filtered.slice(0, visibleCount);
-  $: hasMore = filtered.length > visibleCount;
+  let visibleItems = $derived(filtered.slice(0, visibleCount));
+  let hasMore = $derived(filtered.length > visibleCount);
 
   function loadMore() {
     visibleCount = Math.min(visibleCount + PAGE_SIZE, filtered.length);
   }
 
   // For the "continue" card — stable index
-  $: continueIdx = $solvedQuestions.length % 150;
+  let continueIdx = $derived($solvedQuestions.length % 150);
 </script>
 
 <div class="mx-auto max-w-7xl px-4 py-7 md:px-8 md:py-10">
