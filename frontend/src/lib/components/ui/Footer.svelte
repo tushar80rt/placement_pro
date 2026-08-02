@@ -32,38 +32,25 @@
       class="flex flex-wrap justify-center gap-x-8 gap-y-4 text-sm font-medium text-gray-400"
     >
       <li>
-        <a href="/" class="hover:text-white transition-colors">Features</a>
+        <a href="/aptitude" class="hover:text-white transition-colors">Quantitative Aptitude</a>
       </li>
       <li>
-        <a href="/" class="hover:text-white transition-colors">Workflow</a>
+        <a href="/reasoning" class="hover:text-white transition-colors">Logical Reasoning</a>
       </li>
       <li>
-        <a href="/" class="hover:text-white transition-colors">Pricing</a>
+        <a href="/dsa" class="hover:text-white transition-colors">DSA Sheets (150)</a>
       </li>
       <li>
-        <a href="/" class="hover:text-white transition-colors">Download</a>
+        <a href="/mcq" class="hover:text-white transition-colors">Core CS Subjects</a>
       </li>
-      <li><a href="/" class="hover:text-white transition-colors">About</a></li>
       <li>
-        <a href="/" class="hover:text-white transition-colors">Contact</a>
+        <a href="/projects" class="hover:text-white transition-colors">Resume Projects</a>
+      </li>
+      <li>
+        <a href="/companies" class="hover:text-white transition-colors">Company Mocks</a>
       </li>
     </ul>
-    <ul
-      class="flex flex-wrap justify-center gap-x-8 gap-y-4 text-sm font-medium text-gray-400"
-    >
-      <li>
-        <a href="/" class="hover:text-white transition-colors">Changelog</a>
-      </li>
-      <li><a href="/" class="hover:text-white transition-colors">Blog</a></li>
-      <li>
-        <a
-          href="https://www.example.com/100-must-prepare-ai-engineer-interview-questions-2026"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="hover:text-white transition-colors">AI Interview Questions</a
-        >
-      </li>
-    </ul>
+
   </div>
 
   <!-- Giant Background Text & Main Logo Overlay -->
