@@ -7,12 +7,12 @@
   import FloatingShapes from './FloatingShapes.svelte';
 
   // Device tier: 'desktop' | 'tablet' | 'mobile' | 'low-end'
-  let deviceTier: 'desktop' | 'tablet' | 'mobile' | 'low-end' = 'desktop';
-  let reducedMotion = false;
+  let deviceTier = $state<'desktop' | 'tablet' | 'mobile' | 'low-end'>('desktop');
+  let reducedMotion = $state(false);
   
   // Parallax — only on desktop
-  let parallaxX = 0;
-  let parallaxY = 0;
+  let parallaxX = $state(0);
+  let parallaxY = $state(0);
   let targetX = 0;
   let targetY = 0;
   let animFrame = 0;
@@ -98,13 +98,13 @@
     };
   });
 
-  $: isMobile = deviceTier === 'mobile' || deviceTier === 'low-end';
-  $: isLowEnd = deviceTier === 'low-end';
-  $: showParticles = !reducedMotion && deviceTier === 'desktop';
-  $: showShapes = !isLowEnd;
-  $: transform = (reducedMotion || deviceTier !== 'desktop')
+  let isMobile = $derived(deviceTier === 'mobile' || deviceTier === 'low-end');
+  let isLowEnd = $derived(deviceTier === 'low-end');
+  let showParticles = $derived(!reducedMotion && deviceTier === 'desktop');
+  let showShapes = $derived(!isLowEnd);
+  let transform = $derived((reducedMotion || deviceTier !== 'desktop')
     ? 'translate3d(0,0,0)'
-    : `translate3d(${parallaxX}px,${parallaxY}px,0)`;
+    : `translate3d(${parallaxX}px,${parallaxY}px,0)`);
 </script>
 
 <div class="animated-bg-wrapper">

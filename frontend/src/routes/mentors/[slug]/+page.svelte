@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import { ArrowLeft, Calendar, CheckCircle2 } from 'lucide-svelte';
 	import { mentors } from '$lib/data/mentors';
-	$: mentor = mentors.find((item) => item.slug === $page.params.slug) ?? mentors[0];
+	let mentor = $derived(mentors.find((item) => item.slug === $page.params.slug) ?? mentors[0]);
 </script>
 
 <div class="mx-auto max-w-5xl px-4 py-8 md:px-8">

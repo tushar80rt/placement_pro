@@ -6,10 +6,9 @@
   } from '$lib/data/catalogs';
   import { pdfResources } from '$lib/data/pdfs';
   import { FileText, Download } from 'lucide-svelte';
-  import QuestionCard from '$lib/components/placement/QuestionCard.svelte';
   
-  $: company = placementCompanies.find(item => item.id === $page.params.slug) ?? placementCompanies[0];
-  $: module = $page.params.module || 'dsa';
+  let company = $derived(placementCompanies.find(item => item.id === $page.params.slug) ?? placementCompanies[0]);
+  let module = $derived($page.params.module || 'dsa');
   
   const copy: Record<string, {title:string; eyebrow:string}> = { 
     dsa:{title:'Company DSA sheet',eyebrow:'High-frequency problems'}, 
@@ -22,16 +21,16 @@
     coding:{title:'Coding round playbook',eyebrow:'OA · machine coding · design'}, 
     resources:{title:'Prep resources',eyebrow:'A focused toolkit'} 
   }; 
-  $: content = copy[module] ?? copy.dsa;
+  let content = $derived(copy[module] ?? copy.dsa);
   
   // Get relevant PDFs for this module
-  $: relevantPdfs = pdfResources.filter(pdf => {
+  let relevantPdfs = $derived(pdfResources.filter(pdf => {
       if (module === 'dsa') return pdf.category === 'DSA' || pdf.category === 'Comprehensive';
       if (module === 'aptitude' || module === 'reasoning') return pdf.category.includes('Aptitude') || pdf.category.includes('Reasoning') || pdf.category === 'Comprehensive';
       if (module === 'mcq' || module === 'coding') return pdf.category === 'System Design' || pdf.category === 'Comprehensive';
       if (module === 'hr') return pdf.category === 'Behavioral' || pdf.category === 'Comprehensive';
       return false;
-  }).slice(0, 2);
+  }).slice(0, 2));
 </script>
 
 <div class="mx-auto max-w-6xl px-4 py-8 md:px-8">

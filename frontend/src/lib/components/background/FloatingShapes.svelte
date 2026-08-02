@@ -1,7 +1,11 @@
 <script lang="ts">
-  export let reducedMotion = false;
-  export let isMobile = false;
-  // On mobile, show 0 shapes. On tablet, show 3. On desktop, show all 7.
+  let { 
+    reducedMotion = false, 
+    isMobile = false 
+  }: { 
+    reducedMotion?: boolean; 
+    isMobile?: boolean; 
+  } = $props();
 </script>
 
 {#if !isMobile}

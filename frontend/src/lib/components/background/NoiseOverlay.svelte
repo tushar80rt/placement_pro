@@ -1,8 +1,5 @@
 <script lang="ts">
-  export let opacity: number = 0.02;
-  // On mobile, parent passes opacity=0, so this becomes a no-op.
-  // The grain animation is expensive (steps(10) forces 10 repaints/cycle).
-  // We use a CSS media query to disable it on mobile.
+  let { opacity = 0.02 }: { opacity?: number } = $props();
 </script>
 
 {#if opacity > 0}
